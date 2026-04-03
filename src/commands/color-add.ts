@@ -32,6 +32,7 @@ export async function execute(interaction: CommandInteraction)
     if (hexColor === null)
     {
         await interaction.reply({ content: "Niepoprawny kolor! Użyj formatu #RRGGBB", ephemeral: true })
+        console.log(`Użytkownik ${user.tag} próbował otrzymać kolor ${input}, ale format był niepoprawny`)
         return
     }
 
@@ -40,6 +41,7 @@ export async function execute(interaction: CommandInteraction)
     if (roleColor === null)
     {
         await interaction.reply({ content: "Niepoprawny kolor! Użyj formatu #RRGGBB", ephemeral: true })
+        console.log(`Użytkownik ${user.tag} próbował otrzymać kolor ${input}, ale format był niepoprawny`)
         return
     }
 
