@@ -1,5 +1,7 @@
 import { CommandInteraction, Guild, InteractionContextType, SlashCommandBuilder } from "discord.js";
 
+import { normalizeHexColor, parseColor, isHex } from "../util/colors";
+
 export const data = new SlashCommandBuilder()
     .setName("color")
     .setDescription("Wręcza wybrany kolor")
@@ -41,7 +43,7 @@ export async function execute(interaction: CommandInteraction)
         return
     }
 
-    const existingRole = guild.roles.cache.find((role) => role.name === hexColor && role.colors.primaryColor === roleColor)
+    const existingRole = guild.roles.cache.find((role) => role.name === hexColor && role.color === roleColor)
 
     if (existingRole)
     {
@@ -80,39 +82,4 @@ export async function execute(interaction: CommandInteraction)
     await member.roles.add(role)
     await interaction.reply({ content: "Otrzymano kolor", ephemeral: true })
     console.log(`Użytkownik ${user.tag} otrzymał kolor ${hexColor} (nowa rola)`)
-}
-
-function normalizeHexColor(color: string): string | null
-{
-    const normalized = color.toLowerCase().startsWith("#") ? color.toLowerCase() : `#${color.toLowerCase()}`
-
-    return isHex(normalized) ? normalized : null
-}
-
-function parseColor(color: string): number | null
-{
-    if (!isHex(color))
-    {
-        return null;
-    }
-
-    return hexToBase10(color);
-
-}
-
-function hexToBase10(hex: string): number
-{
-    if (hex.startsWith("#"))
-    {
-        hex = hex.slice(1);
-    }
-
-    return parseInt(hex, 16);
-}
-
-function isHex(hex: string): boolean
-{
-    const hexRegex = /^#?[0-9A-Fa-f]{6}$/;
-
-    return hexRegex.test(hex);
 }
