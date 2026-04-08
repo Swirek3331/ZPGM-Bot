@@ -4,6 +4,8 @@ import { token, clientId } from './config';
 import { commands } from './commands';
 import { deployCommands } from './commands-menager';
 
+import { createLogSession, log } from './util/logs';
+
 
 
 const client = new Client({ 
@@ -14,7 +16,9 @@ const client = new Client({
 })
 
 client.once('clientReady', (readyClient) => {
-    console.log(`Działa jako ${readyClient.user.tag}!`)
+    createLogSession()
+
+    log(`Działa jako ${readyClient.user.tag}!`)
     readyClient.guilds.cache.forEach(async (guild) => {
         await deployCommands({ guildId: guild.id })
     })
@@ -32,8 +36,10 @@ client.on("interactionCreate", async (interaction) => {
   const { commandName } = interaction
   if (commands[commandName as keyof typeof commands])
   {
-    console.log(`Użyto komendy ${commandName} przez ${interaction.user.tag}`)
-    commands[commandName as keyof typeof commands].execute(interaction)
+    log(`Użyto komendy ${commandName} przez ${interaction.user.tag}`)
+    commands[commandName as keyof typeof commands].execute(interaction).catch((error) => {
+        log(`Błąd podczas wykonywania komendy ${commandName}:`, error)
+    })
   }
 })
 

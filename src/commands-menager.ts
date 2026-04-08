@@ -2,6 +2,7 @@ import {token, clientId} from './config';
 import { REST, Routes } from 'discord.js';
 
 import { commands } from "./commands";
+import { log } from './util/logs';
 
 const commandsData = Object.values(commands).map((command) => command.data)
 
@@ -14,7 +15,7 @@ type DeployCommandsProps = {
 export async function deployCommands({ guildId }: DeployCommandsProps)
 {
     try {
-        console.log("Odświeżanie komend...")
+        log("Odświeżanie komend...")
 
         await rest.put(
             Routes.applicationGuildCommands(clientId, guildId),
@@ -23,7 +24,7 @@ export async function deployCommands({ guildId }: DeployCommandsProps)
             }
         )
 
-        console.log("Komendy odświeżone!")
+        log("Komendy odświeżone!")
     } catch (error) {
         console.error(error)
     }

@@ -1,6 +1,7 @@
 import { CommandInteraction, Guild, InteractionContextType, SlashCommandBuilder } from "discord.js";
 
 import { normalizeHexColor, parseColor, isHex } from "../util/colors";
+import { log } from '../util/logs';
 
 export const data = new SlashCommandBuilder()
     .setName("color")
@@ -32,7 +33,7 @@ export async function execute(interaction: CommandInteraction)
     if (hexColor === null)
     {
         await interaction.reply({ content: "Niepoprawny kolor! Użyj formatu #RRGGBB", ephemeral: true })
-        console.log(`Użytkownik ${user.tag} próbował otrzymać kolor ${input}, ale format był niepoprawny`)
+        log(`Użytkownik ${user.tag} próbował otrzymać kolor ${input}, ale format był niepoprawny`)
         return
     }
 
@@ -41,7 +42,7 @@ export async function execute(interaction: CommandInteraction)
     if (roleColor === null)
     {
         await interaction.reply({ content: "Niepoprawny kolor! Użyj formatu #RRGGBB", ephemeral: true })
-        console.log(`Użytkownik ${user.tag} próbował otrzymać kolor ${input}, ale format był niepoprawny`)
+        log(`Użytkownik ${user.tag} próbował otrzymać kolor ${input}, ale format był niepoprawny`)
         return
     }
 
@@ -52,7 +53,7 @@ export async function execute(interaction: CommandInteraction)
         if (member.roles.cache.has(existingRole.id))
         {
             await interaction.reply({ content: "Już masz ten kolor!", ephemeral: true })
-            console.log(`Użytkownik ${user.tag} próbował otrzymać kolor ${hexColor}, ale już go posiada`)
+            log(`Użytkownik ${user.tag} próbował otrzymać kolor ${hexColor}, ale już go posiada`)
             return
         }
 
@@ -65,7 +66,7 @@ export async function execute(interaction: CommandInteraction)
 
         await member.roles.add(existingRole)
         await interaction.reply({ content: "Otrzymano kolor", ephemeral: true })
-        console.log(`Użytkownik ${user.tag} otrzymał kolor ${hexColor} (istniejąca rola)`)
+        log(`Użytkownik ${user.tag} otrzymał kolor ${hexColor} (istniejąca rola)`)
         return
     }
 
@@ -83,5 +84,5 @@ export async function execute(interaction: CommandInteraction)
 
     await member.roles.add(role)
     await interaction.reply({ content: "Otrzymano kolor", ephemeral: true })
-    console.log(`Użytkownik ${user.tag} otrzymał kolor ${hexColor} (nowa rola)`)
+    log(`Użytkownik ${user.tag} otrzymał kolor ${hexColor} (nowa rola)`)
 }
