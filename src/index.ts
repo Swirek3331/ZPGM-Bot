@@ -11,7 +11,8 @@ import { createLogSession, log } from './util/logs';
 const client = new Client({ 
     intents: [
         "Guilds",
-        "GuildMessages"
+    "GuildMessages",
+    "GuildMembers"
     ]
 })
 
