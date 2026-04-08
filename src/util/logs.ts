@@ -29,7 +29,18 @@ export function log(message: string, error?: unknown): void
 
 function currentTime(): string
 {
-    const now = new Date().toISOString();
-    //nie chciało działać bezpośrednio
-    return `[${now}]: `;
+    const now = new Date()
+    
+    const formatted = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Europe/Warsaw",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+    }).format(now)
+
+    return `[${formatted}]: `;
 }
