@@ -1,30 +1,24 @@
 import { readFile, writeFile, open, FileHandle } from 'fs/promises';
 
-//zrobić async/await, ale to później
-export function createLogSession(): void
+export async function createLogSession(): Promise<void>
 {
     console.log("Rozpoczynanie logowania...")
 
-    open(".log", "w").then((fileHandle: FileHandle) => {
-        fileHandle.close()
-        log(`${currentTime()}Logowanie rozpoczęte.`)
-    }).catch((error) => {
-        console.error("Problem z plikiem logów:", error);
-    })
+    const fileHandle = await open(".log", "w");
+    await fileHandle.close()
+    log("Logowanie rozpoczęte.")
+
 }
 
-export function log(message: string, error?: unknown): void
+export async function log(message: string, error?: unknown): Promise<void>
 {
     const logMessage = `${currentTime()}${message}${error ? `\n${error}` : ""}\n`;
     console.log(logMessage)
 
-    open(".log", "a").then((fileHandle: FileHandle) => {
-        fileHandle.write(logMessage).then(() => {
-            fileHandle.close()
-        })
-    }).catch((error) => {
-        console.error("Problem z plikiem logów:", error);
-    })
+    const fileHandle = await open(".log", "a");
+
+    await fileHandle.write(logMessage);
+    await fileHandle.close();
 }
 
 function currentTime(): string

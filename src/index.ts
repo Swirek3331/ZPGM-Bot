@@ -15,13 +15,13 @@ const client = new Client({
     ]
 })
 
-client.once('clientReady', (readyClient) => {
-    createLogSession()
+client.once('clientReady', async (readyClient) => {
+  await createLogSession()
+  await log(`Działa jako ${readyClient.user.tag}!`)
 
-    log(`Działa jako ${readyClient.user.tag}!`)
-    readyClient.guilds.cache.forEach(async (guild) => {
-        await deployCommands({ guildId: guild.id })
-    })
+  for (const guild of readyClient.guilds.cache.values()) {
+    await deployCommands({ guildId: guild.id })
+  }
 })
 
 client.on("guildCreate", async (guild) => {
